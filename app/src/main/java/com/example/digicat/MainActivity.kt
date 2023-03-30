@@ -13,13 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.digicat.Screens.SetupNavGraph
 import com.example.digicat.ui.theme.DigiCatTheme
-import com.example.digicat.ui.theme.orbitron
 import com.example.digicat.ui.theme.orbitronBold
 
 class MainActivity : ComponentActivity() {
 /*TODO make navigaton work on Buttons*/
+/*COmMIT 2, Changed Color Theme, Text Size*/
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        lateinit var navController: NavHostController
         super.onCreate(savedInstanceState)
 
         window.setFlags(
@@ -31,59 +36,12 @@ class MainActivity : ComponentActivity() {
             DigiCatTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    //color is light/baby blue
-                color = Color(204, 229, 255)
+                    color = Color.Black
                 ) {
-                    Menu()
+                    navController = rememberNavController()
+                    SetupNavGraph(navController = navController)
                 }
             }
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun Menu() {
-
-    Column(Modifier.fillMaxWidth(),Arrangement.Top,Alignment.CenterHorizontally) {
-
-        Title("DigiCat")
-    }
-
-        Column(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
-
-            MenuButton("START")
-
-            MenuButton("OPTION")
-
-        }
-}
-
-@Composable
-fun Title(name: String) {
-    Text(text = name,fontFamily = orbitronBold, fontSize = 75.sp)
-}
-
-
-@Composable
-fun MenuButton(text: String){
-    Box(
-        modifier = Modifier.padding(8.dp)
-    ) {
-
-        Button(
-            modifier = Modifier
-
-                .fillMaxWidth(0.5F)
-                .height(50.dp),
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(255, 218, 185),
-                contentColor = Color(0,0,0))
-        ) {
-            Text(text = text, fontFamily = orbitronBold, fontSize = 20.sp)
         }
     }
 }
