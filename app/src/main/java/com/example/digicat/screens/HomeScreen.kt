@@ -1,4 +1,4 @@
-package com.example.digicat.Screens
+package com.example.digicat.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -39,7 +38,7 @@ fun Title(name: String) {
 }
 
 @Composable
-fun MenuButton(text: String,navController: NavController,nav:String){
+fun MenuButton(text: String,navController: NavController? = null,nav:String?=null,onClick: (() -> Unit)? = null){
     Box(
         modifier = Modifier.padding(8.dp)
     ) {
@@ -48,7 +47,7 @@ fun MenuButton(text: String,navController: NavController,nav:String){
             modifier = Modifier
                 .fillMaxWidth(0.5F)
                 .height(50.dp),
-            onClick = { navController.navigate(route = nav) },
+            onClick = { navController?.navigate(route = nav?:"") ?:onClick?.invoke() },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(219,137,39),
                 contentColor = Color.White)

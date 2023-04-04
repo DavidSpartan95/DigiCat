@@ -1,4 +1,4 @@
-package com.example.digicat.Screens
+package com.example.digicat.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController

@@ -1,4 +1,4 @@
-package com.example.digicat.Screens
+package com.example.digicat.screens
 
 sealed class Screen(val route: String){
     object Home:Screen(route = "home_screen")
