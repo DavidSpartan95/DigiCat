@@ -26,7 +26,7 @@ fun HomeScreen(navController: NavController) {
         }
         Column(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
 
-            MenuButton("START",navController,Screen.Option.route)
+            MenuButton("START",navController,Screen.Create.route)
             MenuButton("OPTION",navController,Screen.Option.route)
         }
     }

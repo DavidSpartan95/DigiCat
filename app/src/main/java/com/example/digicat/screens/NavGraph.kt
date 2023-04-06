@@ -23,6 +23,11 @@ fun SetupNavGraph(
         ){
             OptionScreen(navController = navController)
         }
+        composable(
+            route = Screen.Create.route
+        ){
+            CreateScreen(navController = navController)
+        }
     }
 
 }

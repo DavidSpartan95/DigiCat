@@ -1,6 +1,6 @@
 package com.example.digicat.api
 
-import com.example.digicat.screens.TemperatureViewModel
+import com.example.digicat.viewModel.TemperatureViewModel
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

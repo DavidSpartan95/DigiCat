@@ -13,13 +13,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.digicat.api.fetchWeather
 import com.example.digicat.api.temperatureViewModel
 import com.example.digicat.ui.theme.orbitronBold
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+
 
 
 @Composable
@@ -61,15 +59,4 @@ fun OptionScreen(navController: NavController) {
 }
 
 
-//TODO put ViewModel in a seperate package
-class TemperatureViewModel : ViewModel(){
-    private val _temp = MutableStateFlow<String>("null")
-    val temp: StateFlow<String> get() = _temp
-
-    fun setTemp(newTemp: String){
-        _temp.value = newTemp
-        println("temp is " + temp.value)
-        println("_temp is " +_temp.value)
-    }
-}
 
