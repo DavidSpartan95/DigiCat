@@ -4,14 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.digicat.dataBase.UserRepository
 
 @Composable
 fun SetupNavGraph(
-    navController: NavHostController
+    navController: NavHostController, userRepository: UserRepository
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Screen.Home.route,
     ){
         composable(
             route = Screen.Home.route
@@ -26,7 +27,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.Create.route
         ){
-            CreateScreen(navController = navController)
+            CreateScreen(navController = navController,userRepository = userRepository)
         }
     }
 

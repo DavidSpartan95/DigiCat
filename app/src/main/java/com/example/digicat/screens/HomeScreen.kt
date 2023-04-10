@@ -11,8 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import com.example.digicat.dataBase.AppDatabase
+import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.ui.theme.orbitronBold
+
 
 
 @Composable
