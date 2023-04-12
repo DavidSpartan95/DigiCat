@@ -2,6 +2,9 @@ package com.example.digicat.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,7 +14,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import com.example.digicat.R
 import com.example.digicat.dataBase.User
@@ -19,33 +21,36 @@ import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.viewModel.DigiCatColorViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.util.*
-import kotlin.random.Random.Default.nextInt
 
 val digiCatColorViewModel = DigiCatColorViewModel()
 @Composable
 fun CreateScreen(navController: NavController,userRepository: UserRepository) {
+    val eyePart = arrayOf(R.drawable.eyes,R.drawable.eyes2)
     val color by digiCatColorViewModel.color.collectAsState()
     var text by remember { mutableStateOf("") }
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
+    var num by remember {mutableStateOf(0)}
+    val scrollState = rememberScrollState()
 
-        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+    Surface(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(state = scrollState), color = Color.Black) {
+
+        Column(Modifier.fillMaxWidth(),Arrangement.Top, Alignment.CenterHorizontally) {
 
             Text(text = "Create", fontSize = 30.sp, fontFamily = orbitronBold, color = Color.White)
-        }
 
+            DrawDigiCat(color,eyePart[num])
 
-        Column(Modifier.fillMaxWidth(),Arrangement.Center, Alignment.CenterHorizontally) {
-
-            TextField(value = text, onValueChange = { text = it}, colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
-                label = { Text("Name") },
-                modifier = Modifier.padding(20.dp))
-            DrawDigiCat(color)
-
-        }
-
-        Column(Modifier.fillMaxWidth(), Arrangement.Bottom, Alignment.CenterHorizontally) {
+            Button(onClick = {
+                digiCatColorViewModel.setColor(randomColor())
+            }) {
+                Text(text = "Random Color")
+            }
+            Button(onClick = {
+                num = if(num == eyePart.size-1) 0 else num+1
+            }) {
+                Text(text = "Change Eyes")
+            }
 
             Button(onClick = {
                 userRepository.performDatabaseOperation(Dispatchers.IO) {
@@ -53,20 +58,19 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
                     println(userRepository.getUsers())
                 }
             }){
-                Text("INSERT NAME")
+                Text("DONE")
             }
-            Button(onClick = {
-                digiCatColorViewModel.setColor(randomColor())
-            }) {
-                Text(text = "Change Color")
-            }
-        }
 
+            TextField(value = text, onValueChange = { text = it}, colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
+                label = { Text("Name") },
+                modifier = Modifier.padding(20.dp))
+        }
     }
+
 }
 
 @Composable
-fun DrawDigiCat(primeColor:Color) {
+fun DrawDigiCat(primeColor:Color,eyePart:Int) {
 
     Box(Modifier.size(250.dp), contentAlignment = Alignment.TopCenter) {
         Image(painter = painterResource(id = R.drawable.ears_outer), contentDescription = "",
@@ -77,7 +81,7 @@ fun DrawDigiCat(primeColor:Color) {
         Image(painter = painterResource(id = R.drawable.body), contentDescription = "",
             colorFilter = ColorFilter.tint(color = primeColor))
 
-        Image(painter = painterResource(id = R.drawable.eyes), contentDescription = "")
+        Image(painter = painterResource(id = eyePart), contentDescription = "")
 
         Image(painter = painterResource(id = R.drawable.mouth_w), contentDescription = "")
 
