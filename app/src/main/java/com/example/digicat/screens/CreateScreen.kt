@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.digicat.R
 import com.example.digicat.dataBase.User
 import com.example.digicat.dataBase.UserRepository
+import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.viewModel.DigiCatColorViewModel
 import kotlinx.coroutines.Dispatchers
@@ -54,8 +55,13 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
 
             Button(onClick = {
                 userRepository.performDatabaseOperation(Dispatchers.IO) {
-                    userRepository.insertUser(User(text))
+                    userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
                     println(userRepository.getUsers())
+                }
+                navController.navigate(route = "game_screen/" + text){
+                    popUpTo(Screen.Game.route){
+                        inclusive = true
+                    }
                 }
             }){
                 Text("DONE")
