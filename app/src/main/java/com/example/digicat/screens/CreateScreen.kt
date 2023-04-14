@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,9 +24,11 @@ import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.viewModel.DigiCatColorViewModel
 import kotlinx.coroutines.Dispatchers
 
-val digiCatColorViewModel = DigiCatColorViewModel()
+var digiCatColorViewModel = DigiCatColorViewModel()
 @Composable
 fun CreateScreen(navController: NavController,userRepository: UserRepository) {
+
+    //TODO eyePart needs to be a viewModel aswell
     val eyePart = arrayOf(R.drawable.eyes,R.drawable.eyes2)
     val color by digiCatColorViewModel.color.collectAsState()
     var text by remember { mutableStateOf("") }
@@ -54,15 +57,18 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
             }
 
             Button(onClick = {
-                userRepository.performDatabaseOperation(Dispatchers.IO) {
-                    userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
-                    println(userRepository.getUsers())
-                }
-                navController.navigate(route = "game_screen/" + text){
-                    popUpTo(Screen.Game.route){
-                        inclusive = true
+                if (text.isNotEmpty()){
+                    userRepository.performDatabaseOperation(Dispatchers.IO) {
+                        userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
                     }
-                }
+                    //Reset the ViewModel to default
+                    //digiCatColorViewModel = DigiCatColorViewModel()
+                    navController.navigate(route = "game_screen/" + text){
+                        popUpTo(Screen.Create.route){
+                            inclusive = true
+                        }
+                    }
+                }//TODO make a Toast popup if Empty
             }){
                 Text("DONE")
             }

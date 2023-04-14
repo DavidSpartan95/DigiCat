@@ -2,6 +2,7 @@ package com.example.digicat.dataBase
 import  androidx.room. Dao
 import androidx.room. Insert
 import androidx.room. Query
+import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 
 @Dao
 interface UserDao {
@@ -10,4 +11,6 @@ interface UserDao {
 
     @Query("SELECT * FROM User")
     fun getAllUsers(): List<User>
+
+
 }

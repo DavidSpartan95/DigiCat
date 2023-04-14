@@ -6,4 +6,5 @@ class DigiCatData(
     val drawInstruction: Int,
     val color: Color
 ) {
+
 }

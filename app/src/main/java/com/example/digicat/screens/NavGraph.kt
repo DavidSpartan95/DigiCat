@@ -40,6 +40,11 @@ fun SetupNavGraph(
         ){ backStackEntry ->
             GameScreen(navController = navController,userRepository = userRepository,backStackEntry.arguments?.getString("username")?:"")
         }
+        composable(
+            route = Screen.Load.route
+        ){
+            LoadScreen(navController = navController,userRepository = userRepository)
+        }
     }
 
 }

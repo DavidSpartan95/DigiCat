@@ -1,8 +1,8 @@
 package com.example.digicat.dataBase
 
+import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines. Dispatchers
 import kotlinx.coroutines.launch
 
 class UserRepository (private val appDatabase : AppDatabase, private val
@@ -19,4 +19,5 @@ coroutineScope : CoroutineScope ) {
             databaseOperation ()
         }
     }
+
 }
