@@ -31,7 +31,7 @@ fun HomeScreen(navController: NavController) {
         Column(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
 
             MenuButton("NEW GAME",navController,Screen.Create.route)
-            MenuButton("CONTINUE",navController,Screen.Load.route)
+            MenuButton("LOAD GAME",navController,Screen.Load.route)
             MenuButton("OPTION",navController,Screen.Option.route)
         }
     }
@@ -50,14 +50,16 @@ fun MenuButton(text: String,navController: NavController? = null,nav:String?=nul
 
         Button(
             modifier = Modifier
-                .fillMaxWidth(0.5F)
-                .height(50.dp),
+                //.fillMaxWidth(0.5F)
+                .height(50.dp)
+                .widthIn(min = 32.dp)
+            ,
             onClick = { navController?.navigate(route = nav?:"") ?:onClick?.invoke() },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(219,137,39),
                 contentColor = Color.White)
         ) {
-            Text(text = text, fontFamily = orbitronBold, fontSize = 24.sp)
+            Text(text = text, fontFamily = orbitronBold, fontSize = 24.sp, modifier = Modifier.widthIn(min = 32.dp))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.digicat.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -27,7 +29,7 @@ import kotlinx.coroutines.Dispatchers
 var digiCatColorViewModel = DigiCatColorViewModel()
 @Composable
 fun CreateScreen(navController: NavController,userRepository: UserRepository) {
-
+    val context = LocalContext.current
     //TODO eyePart needs to be a viewModel aswell
     val eyePart = arrayOf(R.drawable.eyes,R.drawable.eyes2)
     val color by digiCatColorViewModel.color.collectAsState()
@@ -63,12 +65,14 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
                     }
                     //Reset the ViewModel to default
                     //digiCatColorViewModel = DigiCatColorViewModel()
-                    navController.navigate(route = "game_screen/" + text){
-                        popUpTo(Screen.Create.route){
+                    navController.navigate(route = "game_screen/$text"){
+                        popUpTo(Screen.Load.route){
                             inclusive = true
                         }
                     }
-                }//TODO make a Toast popup if Empty
+                }else{
+                    Toast.makeText(context,"please insert name", Toast.LENGTH_LONG).show()
+                }
             }){
                 Text("DONE")
             }
@@ -78,7 +82,6 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
                 modifier = Modifier.padding(20.dp))
         }
     }
-
 }
 
 @Composable

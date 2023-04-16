@@ -13,6 +13,13 @@ coroutineScope : CoroutineScope ) {
     fun getUsers(): List<User> {
         return appDatabase .userDao().getAllUsers ()
     }
+
+    fun deleteUser(name: String) {
+        appDatabase.userDao().deleteUserByName(name)
+    }
+    fun addPoint(name: String){
+        appDatabase.userDao().incrementPoints(name)
+    }
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,
                                   databaseOperation : suspend () -> Unit) {
         coroutineScope .launch(dispatcher) {

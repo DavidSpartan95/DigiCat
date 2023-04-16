@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.digicat.R
+import com.example.digicat.dataBase.User
 import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +31,13 @@ class DigiCatColorViewModel : ViewModel(){//This is going to change
 
 }
 class GameViewModel() : ViewModel() {
-    private val _userDraw = MutableStateFlow<DigiCatData?>(null)
-    val userDraw: StateFlow<DigiCatData?> = _userDraw
+    private val _userDraw = MutableStateFlow<User?>(null)
+    val userDraw: StateFlow<User?> = _userDraw
     fun getModel(userRepository: UserRepository, username: String){
         viewModelScope.launch(Dispatchers.IO) {
             for (x in userRepository.getUsers()) {
                 if (x.name == username) {
-                    _userDraw.value = x.draw[0]
+                    _userDraw.value = x
                     break
                 }
             }
