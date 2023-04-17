@@ -21,4 +21,7 @@ interface UserDao {
 
     @Query("UPDATE User SET points = points + 1 WHERE name = :name")
      fun incrementPoints(name: String)
+    @Query("SELECT points FROM User WHERE name = :name")
+    fun getPointsByName(name: String): Int
+
 }

@@ -1,6 +1,5 @@
 package com.example.digicat.dataBase
 
-import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -19,6 +18,9 @@ coroutineScope : CoroutineScope ) {
     }
     fun addPoint(name: String){
         appDatabase.userDao().incrementPoints(name)
+    }
+    fun fetchPoints(name: String): Int {
+        return appDatabase.userDao().getPointsByName(name)
     }
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,
                                   databaseOperation : suspend () -> Unit) {

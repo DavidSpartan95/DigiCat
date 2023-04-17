@@ -22,7 +22,7 @@ class TemperatureViewModel : ViewModel(){
 }
 
 class DigiCatColorViewModel : ViewModel(){//This is going to change
-    private val _color = MutableStateFlow<Color>(Color.Green)
+    private val _color = MutableStateFlow<Color>(Color(219,137,39))
     val color: StateFlow<Color> get() = _color
 
     fun setColor(newColor: Color){

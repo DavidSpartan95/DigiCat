@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -30,12 +31,14 @@ var digiCatColorViewModel = DigiCatColorViewModel()
 @Composable
 fun CreateScreen(navController: NavController,userRepository: UserRepository) {
     val context = LocalContext.current
+
     //TODO eyePart needs to be a viewModel aswell
     val eyePart = arrayOf(R.drawable.eyes,R.drawable.eyes2)
     val color by digiCatColorViewModel.color.collectAsState()
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf("TEST") }
     var num by remember {mutableStateOf(0)}
     val scrollState = rememberScrollState()
+
 
     Surface(modifier = Modifier
         .fillMaxSize()
@@ -47,34 +50,45 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
 
             DrawDigiCat(color,eyePart[num])
 
-            Button(onClick = {
+            Button(modifier = Modifier
+                .height(50.dp)
+                .widthIn(min = 32.dp)
+                ,onClick = {
                 digiCatColorViewModel.setColor(randomColor())
-            }) {
-                Text(text = "Random Color")
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))) {
+                Text(text = "Random Color",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
             }
-            Button(onClick = {
+            Button(modifier = Modifier
+                .height(50.dp)
+                .widthIn(min = 32.dp)
+                ,onClick = {
                 num = if(num == eyePart.size-1) 0 else num+1
-            }) {
-                Text(text = "Change Eyes")
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))) {
+                Text(text = "Change Eyes",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
             }
 
-            Button(onClick = {
+            Button(modifier = Modifier
+                .height(50.dp)
+                .widthIn(min = 32.dp)
+                ,onClick = {
                 if (text.isNotEmpty()){
-                    userRepository.performDatabaseOperation(Dispatchers.IO) {
+                    userRepository.performDatabaseOperation(Dispatchers.IO) {//TODO try to do this at GameScreen
                         userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
                     }
-                    //Reset the ViewModel to default
-                    //digiCatColorViewModel = DigiCatColorViewModel()
-                    navController.navigate(route = "game_screen/$text"){
-                        popUpTo(Screen.Load.route){
-                            inclusive = true
+
+                        navController.navigate(route = "game_screen/$text"){
+                            popUpTo(Screen.Create.route){
+                                inclusive = true
+                            }
                         }
-                    }
                 }else{
                     Toast.makeText(context,"please insert name", Toast.LENGTH_LONG).show()
                 }
-            }){
-                Text("DONE")
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))){
+                Text("DONE",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
             }
 
             TextField(value = text, onValueChange = { text = it}, colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
@@ -85,9 +99,10 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
 }
 
 @Composable
-fun DrawDigiCat(primeColor:Color,eyePart:Int) {
-
-    Box(Modifier.size(250.dp), contentAlignment = Alignment.TopCenter) {
+fun DrawDigiCat(primeColor:Color,eyePart:Int,size: Int? = null) {
+    var drawSize = 250
+    if (size != null){ drawSize = size}
+    Box(Modifier.size(drawSize.dp), contentAlignment = Alignment.TopCenter) {
         Image(painter = painterResource(id = R.drawable.ears_outer), contentDescription = "",
             colorFilter = ColorFilter.tint(color = primeColor))
 

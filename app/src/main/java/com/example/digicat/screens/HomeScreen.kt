@@ -50,7 +50,6 @@ fun MenuButton(text: String,navController: NavController? = null,nav:String?=nul
 
         Button(
             modifier = Modifier
-                //.fillMaxWidth(0.5F)
                 .height(50.dp)
                 .widthIn(min = 32.dp)
             ,
@@ -59,7 +58,7 @@ fun MenuButton(text: String,navController: NavController? = null,nav:String?=nul
                 backgroundColor = Color(219,137,39),
                 contentColor = Color.White)
         ) {
-            Text(text = text, fontFamily = orbitronBold, fontSize = 24.sp, modifier = Modifier.widthIn(min = 32.dp))
+            Text(text = text, fontFamily = orbitronBold, fontSize = 24.sp)
         }
     }
 }

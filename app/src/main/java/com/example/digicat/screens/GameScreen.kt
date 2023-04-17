@@ -1,7 +1,6 @@
 package com.example.digicat.screens
 
 import android.annotation.SuppressLint
-import android.text.style.ClickableSpan
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
@@ -21,41 +20,48 @@ import kotlinx.coroutines.Dispatchers
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun GameScreen(navController: NavController, userRepository: UserRepository, username: String) {
-
+    var points: Int  by remember {mutableStateOf(0)}
     //Reset the default createScreen digiCat
-    LaunchedEffect(true){digiCatColorViewModel = DigiCatColorViewModel()}
-    var points = 0
+    //LaunchedEffect(true){digiCatColorViewModel = DigiCatColorViewModel()}
+
     val viewModel = remember {
         GameViewModel()
     }
+
     val userDraw = viewModel.userDraw.collectAsState()
-        if (userDraw.value == null){
+
+        LaunchedEffect(true){
             viewModel.getModel(userRepository = userRepository, username = username)
+            userRepository.performDatabaseOperation(Dispatchers.IO) {
+                try {
+                    points = userRepository.fetchPoints(username)
+                }catch (e: java.lang.Exception){
+                    println(e)
+                }
+            }
+
         }
 
-    Surface(modifier = Modifier.fillMaxSize(),
-        color = Color.Black) {
+
+    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
+
         Column(Modifier.fillMaxWidth(), Arrangement.Top, Alignment.CenterHorizontally) {
 
             Text(text = "Hello $username", color = Color.White)
 
             userDraw.value?.let {
 
-            }
-
-            userDraw.value?.let {
-
-                Text(text = "Points ${userDraw.value!!.points}", color = Color.White)
+                Text(text = "Points $points", color = Color.White)
 
                 Box(
                     Modifier
                         .widthIn(min = 32.dp)
                         .heightIn(min = 32.dp)
                         .clickable {
-                            points++
-                            println(points)
                             userRepository.performDatabaseOperation(Dispatchers.IO) {
-                                userRepository.addPoint(username)//TODO make this a viewModel
+
+                                userRepository.addPoint(username)
+                                points = userRepository.fetchPoints(username)
 
                             }
                         },
