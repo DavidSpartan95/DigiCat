@@ -10,8 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.digicat.dataBase.UserRepository
+import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.viewModel.DigiCatColorViewModel
 import com.example.digicat.viewModel.GameViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 fun GameScreen(navController: NavController, userRepository: UserRepository, username: String) {
     var points: Int  by remember {mutableStateOf(0)}
     //Reset the default createScreen digiCat
-    //LaunchedEffect(true){digiCatColorViewModel = DigiCatColorViewModel()}
+    LaunchedEffect(true){digiCatColorViewModel = DigiCatColorViewModel()}
 
     val viewModel = remember {
         GameViewModel()
@@ -47,11 +49,11 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
 
         Column(Modifier.fillMaxWidth(), Arrangement.Top, Alignment.CenterHorizontally) {
 
-            Text(text = "Hello $username", color = Color.White)
+            Text(text = "Hello $username", color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
 
             userDraw.value?.let {
 
-                Text(text = "Points $points", color = Color.White)
+                Text(text = "Points $points", color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
 
                 Box(
                     Modifier

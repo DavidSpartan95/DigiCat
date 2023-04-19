@@ -1,5 +1,6 @@
 package com.example.digicat.screens
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -25,7 +26,9 @@ import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.viewModel.DigiCatColorViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 var digiCatColorViewModel = DigiCatColorViewModel()
 @Composable
@@ -35,9 +38,10 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
     //TODO eyePart needs to be a viewModel aswell
     val eyePart = arrayOf(R.drawable.eyes,R.drawable.eyes2)
     val color by digiCatColorViewModel.color.collectAsState()
-    var text by remember { mutableStateOf("TEST") }
+    var text by remember { mutableStateOf("") }
     var num by remember {mutableStateOf(0)}
     val scrollState = rememberScrollState()
+
 
 
     Surface(modifier = Modifier
@@ -74,17 +78,30 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
                 .widthIn(min = 32.dp)
                 ,onClick = {
                 if (text.isNotEmpty()){
-                    userRepository.performDatabaseOperation(Dispatchers.IO) {//TODO try to do this at GameScreen
-                        userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
-                    }
+                //TODO Consider refactoring this code into a function to enhance its readability and organization
+                    userRepository.performDatabaseOperation(Dispatchers.IO) {
+                        val foundUser = userRepository.getUsers().find { it.name == text }
+                        if (foundUser == null){
+                            userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart[num],color))))
 
-                        navController.navigate(route = "game_screen/$text"){
-                            popUpTo(Screen.Create.route){
-                                inclusive = true
+                            CoroutineScope(Dispatchers.Main).launch {
+                                navController.navigate(route = "game_screen/$text"){
+                                    popUpTo(Screen.Create.route){
+                                        inclusive = true
+                                    }
+                                }
+                            }
+                        }else{
+                            CoroutineScope(Dispatchers.Main).launch {
+                                ToastMessage("User name already exist",context)
                             }
                         }
+
+                    }
+
                 }else{
-                    Toast.makeText(context,"please insert name", Toast.LENGTH_LONG).show()
+
+                    ToastMessage("please insert name",context)
                 }
             }, colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(219,137,39))){
@@ -98,6 +115,11 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
     }
 }
 
+fun ToastMessage(msg: String, context: Context){
+
+    Toast.makeText(context,"please insert name", Toast.LENGTH_LONG).show()
+
+}
 @Composable
 fun DrawDigiCat(primeColor:Color,eyePart:Int,size: Int? = null) {
     var drawSize = 250
