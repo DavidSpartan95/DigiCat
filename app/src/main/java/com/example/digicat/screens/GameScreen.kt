@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.ui.theme.orbitronBold
-import com.example.digicat.viewModel.DigiCatColorViewModel
+import com.example.digicat.utilities.DrawDigiCat
+import com.example.digicat.viewModel.DigiCatViewModel
 import com.example.digicat.viewModel.GameViewModel
 import kotlinx.coroutines.Dispatchers
 
@@ -22,17 +23,15 @@ import kotlinx.coroutines.Dispatchers
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun GameScreen(navController: NavController, userRepository: UserRepository, username: String) {
-    var points: Int  by remember {mutableStateOf(0)}
-    //Reset the default createScreen digiCat
-    LaunchedEffect(true){digiCatColorViewModel = DigiCatColorViewModel()}
 
-    val viewModel = remember {
-        GameViewModel()
-    }
+    var points: Int  by remember {mutableStateOf(0)}
+
+    val viewModel = remember { GameViewModel() }
 
     val userDraw = viewModel.userDraw.collectAsState()
 
         LaunchedEffect(true){
+            digiCatViewModel = DigiCatViewModel()
             viewModel.getModel(userRepository = userRepository, username = username)
             userRepository.performDatabaseOperation(Dispatchers.IO) {
                 try {

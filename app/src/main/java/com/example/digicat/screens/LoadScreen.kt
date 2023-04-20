@@ -25,6 +25,7 @@ import com.example.digicat.dataBase.User
 import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.dataBase.userDigiCatData.DigiCatData
 import com.example.digicat.ui.theme.orbitronBold
+import com.example.digicat.utilities.DrawDigiCat
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -90,7 +91,9 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
                     ) {
                         Text(text = "Delete",fontFamily = orbitronBold, fontSize = 20.sp)
                     }
+
                     DrawDigiCat(saveFiles!![it].draw[0].color, saveFiles!![it].draw[0].drawInstruction, 50)
+
                     Button(modifier = Modifier
                         .heightIn(min = 30.dp)
                         .widthIn(min = 80.dp),
