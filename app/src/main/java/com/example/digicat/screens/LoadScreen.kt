@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 
 @Composable
 fun LoadScreen(navController: NavController, userRepository: UserRepository) {
+
     var saveFiles: List<User>? by remember {mutableStateOf(null)}
     var delete: Boolean  by remember {mutableStateOf(false)}
 
@@ -47,74 +48,96 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
 
     Surface(modifier = Modifier.fillMaxSize(),color = Color.Black) {
 
-    saveFiles?.let {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(saveFiles!!.size) {
+        saveFiles?.let {
 
-                Column(modifier = Modifier
-                    .background(Color.Black)
-                    .fillMaxWidth()
-                    .padding(2.dp)
-                    .border(width = 5.dp, color = Color.Green, shape = RoundedCornerShape(8.dp))
-                    .padding(20.dp)
-                ) {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-                Text(
-                    text = saveFiles!![it].name,
-                    fontFamily = orbitronBold,
-                    fontSize = 24.sp,
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    modifier = Modifier
+                items(saveFiles!!.size) {
+
+                    Column(modifier = Modifier
+                        .background(Color.Black)
                         .fillMaxWidth()
-                        .padding(vertical = 24.dp)
-                )
-                Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
-
-                    Button(modifier = Modifier
-                        .heightIn(min = 30.dp)
-                        .widthIn(min = 80.dp),
-                        onClick = {
-                            userRepository.performDatabaseOperation(Dispatchers.IO) {
-                                userRepository.deleteUser(saveFiles!![it].name)
-                                delete = true
-                            }
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(255,0,0),
-                            contentColor = Color.White)
-
-
+                        .padding(2.dp)
+                        .border(width = 5.dp, color = Color.Green, shape = RoundedCornerShape(8.dp))
+                        .padding(20.dp)
                     ) {
-                        Text(text = "Delete",fontFamily = orbitronBold, fontSize = 20.sp)
+
+                        DisplayName(name = saveFiles!![it].name)
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            DeleteButton(userRepository, saveFiles!![it].name) {delete = true}
+
+                            DrawDigiCat(saveFiles!![it].draw[0].color, saveFiles!![it].draw[0].drawInstruction, 50)
+
+                            LoadButton(navController = navController, userName = saveFiles!![it].name)
+
+                        }
                     }
-
-                    DrawDigiCat(saveFiles!![it].draw[0].color, saveFiles!![it].draw[0].drawInstruction, 50)
-
-                    Button(modifier = Modifier
-                        .heightIn(min = 30.dp)
-                        .widthIn(min = 80.dp),
-                        onClick = {
-                            navController.navigate(route = "game_screen/" + saveFiles!![it].name){
-                                popUpTo(Screen.Load.route){
-                                    inclusive = true
-                                }
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0,255,0),
-                            contentColor = Color.White)
-                    ) {
-                        Text(text = "Load",fontFamily = orbitronBold, fontSize = 20.sp)
-                    }
-
                 }
-            }
             }
         }
     }
 }
+
+@Composable
+fun DeleteButton(userRepository: UserRepository, userName: String, function:(() -> Unit)) {
+    Button(modifier = Modifier
+        .heightIn(min = 30.dp)
+        .widthIn(min = 80.dp),
+        onClick = {
+            userRepository.performDatabaseOperation(Dispatchers.IO) {
+                userRepository.deleteUser(userName)
+                function.invoke()
+            }
+
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color(255,0,0),
+            contentColor = Color.White)
+
+
+    ) {
+        Text(text = "Delete",fontFamily = orbitronBold, fontSize = 20.sp)
+    }
+
 }
+
+@Composable
+fun LoadButton(navController: NavController, userName: String){
+    Button(modifier = Modifier
+        .heightIn(min = 30.dp)
+        .widthIn(min = 80.dp),
+        onClick = {
+            navController.navigate(route = "game_screen/$userName"){
+                popUpTo(Screen.Load.route){
+                    inclusive = true
+                }
+            }
+        },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color(0,255,0),
+            contentColor = Color.White)
+    ) {
+        Text(text = "Load",fontFamily = orbitronBold, fontSize = 20.sp)
+    }
+}
+
+@Composable
+fun DisplayName(name:String){
+    Text(
+        text = name,
+        fontFamily = orbitronBold,
+        fontSize = 24.sp,
+        textAlign = TextAlign.Center,
+        color = Color.White,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 24.dp)
+    )
+}
+
