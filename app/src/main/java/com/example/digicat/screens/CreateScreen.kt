@@ -1,8 +1,10 @@
 package com.example.digicat.screens
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -34,9 +36,12 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
         .fillMaxSize()
         .verticalScroll(state = scrollState), color = Color.Black) {
 
-        Column(Modifier.fillMaxWidth(),Arrangement.Top, Alignment.CenterHorizontally) {
+        Column(
+            Modifier
+                .fillMaxWidth(),
+            Arrangement.Top, Alignment.CenterHorizontally) {
 
-            Text(text = "Create", fontSize = 30.sp, fontFamily = orbitronBold, color = Color.White)
+            Text(text = "Create", fontSize =75.sp, fontFamily = orbitronBold, color = Color.White)
 
             DrawDigiCat(digiColor,digiEye)
 
@@ -44,12 +49,11 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
 
             ChangeEyeButton { digiCatViewModel.changeEyeTest() }
 
-            DoneButton{ checkAndNavigate(navController,userRepository,text,context,digiEye,digiColor) }
-
-            //TODO style this
             TextField(value = text, onValueChange = { digiCatViewModel.changeText(it)}, colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 label = { Text("Name") },
                 modifier = Modifier.padding(20.dp))
+
+            DoneButton{ checkAndNavigate(navController,userRepository,text,context,digiEye,digiColor) }
         }
     }
 }

@@ -24,13 +24,13 @@ class DigiCatViewModel : ViewModel(){//This is going to change
 private val _text = MutableStateFlow<String>("")
     val text: StateFlow<String> get() = _text
 
-    private val _color = MutableStateFlow<Color>(Color(219,137,39))
+    private val _color = MutableStateFlow<Color>(Color(102,189,209))
     val color: StateFlow<Color> get() = _color
 
     private val _eyes = MutableStateFlow<Int>(R.drawable.eyes)
     val eyes: StateFlow<Int> get() = _eyes
 
-    private val eyeParts = arrayOf(R.drawable.eyes,R.drawable.eyes2)
+    private val eyeParts = arrayOf(R.drawable.eyes,R.drawable.eyes2,R.drawable.eyes3,R.drawable.eyes4)
     private var selectNum = 0
 
     fun changeText(text:String){

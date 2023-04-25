@@ -22,6 +22,18 @@ coroutineScope : CoroutineScope ) {
     fun fetchPoints(name: String): Int {
         return appDatabase.userDao().getPointsByName(name)
     }
+    fun unlockSunAchvivments(name:String){//OLD
+        appDatabase.userDao().unlockSunAchv(name)
+    }
+    fun unlockAchvimentsNew(name:String){//New
+        appDatabase.userDao().incrementAchv(name)
+    }
+    fun fetchSunUnlock(name: String): Boolean {//OLD
+        return appDatabase.userDao().getSunUnlcok(name)
+    }
+    fun fetchUnlocksNew(name: String): Int{
+        return appDatabase.userDao().getAchvByName(name)
+    }
     fun performDatabaseOperation (dispatcher: CoroutineDispatcher,
                                   databaseOperation : suspend () -> Unit) {
         coroutineScope .launch(dispatcher) {

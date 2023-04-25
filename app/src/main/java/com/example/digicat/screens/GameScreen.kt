@@ -1,50 +1,72 @@
 package com.example.digicat.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.digicat.R
+import com.example.digicat.api.temperatureViewModel
 import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.utilities.DrawDigiCat
+import com.example.digicat.utilities.toastMessage
 import com.example.digicat.viewModel.DigiCatViewModel
 import com.example.digicat.viewModel.GameViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun GameScreen(navController: NavController, userRepository: UserRepository, username: String) {
 
+    val temp by temperatureViewModel.temp.collectAsState()
+    val context = LocalContext.current
+    var sunProg by remember { mutableStateOf(0) }
+    //TODO add snow in userDAO so user can unlock the snowAchievement
+    var snowProg by remember { mutableStateOf(0) }
+    var achvAmount by remember { mutableStateOf(0) }
+    var achivmentUnlock by remember { mutableStateOf(false) }
     var points: Int  by remember {mutableStateOf(0)}
-
+    val scrollState = rememberScrollState()
     val viewModel = remember { GameViewModel() }
 
     val userDraw = viewModel.userDraw.collectAsState()
 
-        LaunchedEffect(true){
+        LaunchedEffect(true,achivmentUnlock){
+            if (achivmentUnlock){achivmentUnlock = false}
+            println("Launched")
             digiCatViewModel = DigiCatViewModel()
             viewModel.getModel(userRepository = userRepository, username = username)
             userRepository.performDatabaseOperation(Dispatchers.IO) {
                 try {
                     points = userRepository.fetchPoints(username)
+                    achvAmount = userRepository.fetchUnlocksNew(username)
                 }catch (e: java.lang.Exception){
                     println(e)
                 }
             }
-
         }
 
 
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
+    Surface(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(state = scrollState), color = Color.Black) {
 
         Column(Modifier.fillMaxWidth(), Arrangement.Top, Alignment.CenterHorizontally) {
 
@@ -58,12 +80,40 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                     Modifier
                         .widthIn(min = 32.dp)
                         .heightIn(min = 32.dp)
+                        .padding(45.dp)
                         .clickable {
                             userRepository.performDatabaseOperation(Dispatchers.IO) {
 
                                 userRepository.addPoint(username)
                                 points = userRepository.fetchPoints(username)
+                                if (temp != "null") {
+                                    if (temp.toInt() > 10) {
+                                        sunProg++
+                                    } else {
+                                        snowProg++
+                                    }
+                                }
 
+                                if (points == 10 || points == 100 || points == 1000 || points == 10000) {
+
+                                    CoroutineScope(Dispatchers.Main).launch {
+
+                                        toastMessage("Achievement unlocked!", context)
+
+                                    }
+                                    userRepository.unlockAchvimentsNew(username)
+                                    achivmentUnlock = true
+
+                                }
+                                if (sunProg == 10 && !userDraw.value!!.sunAchievement) {
+                                    userRepository.unlockSunAchvivments(username)
+
+                                    CoroutineScope(Dispatchers.Main).launch {
+
+                                        toastMessage("Achievement unlocked!", context)
+
+                                    }
+                                }
                             }
                         },
                     contentAlignment = Alignment.Center
@@ -72,10 +122,55 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                     DrawDigiCat(userDraw.value!!.draw[0].color, userDraw.value!!.draw[0].drawInstruction)
 
                 }
+                //TODO make achievements
+                Text(text = "Achievements", color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+
+                LazyRow(){
+
+                    items(achvAmount+2) {
+                        if ((it == 0 && !userDraw.value!!.sunAchievement) ||(it == 1 && !userDraw.value!!.snowAchievement)){
+                            //dont draw the special achievements if we dont have them unlocked
+                        }else{
+                            Box(
+                                Modifier
+                                    .widthIn(min = 32.dp)
+                                    .heightIn(min = 32.dp)) {
+                                PaintAchviment(
+                                    unlocked = it + 1,
+                                    sun = userDraw.value!!.sunAchievement,
+                                    snow = userDraw.value!!.snowAchievement
+                                )
+                            }
+                        }
+
+                    }
+                }
             }
         }
-
     }
 
 }
+@Composable
+fun PaintAchviment(unlocked:Int,sun:Boolean,snow:Boolean) {
 
+    Box(Modifier.size(75.dp), contentAlignment = Alignment.TopCenter) {
+        if (unlocked == 1 && sun) {
+            Image(painter = painterResource(id = R.drawable.sun), contentDescription = "")
+        }
+        if (unlocked == 2 && snow) {
+            Image(painter = painterResource(id = R.drawable.snow), contentDescription = "")
+        }
+        if (unlocked == 3) {
+            Image(painter = painterResource(id = R.drawable.bronze), contentDescription = "")
+        }
+        if (unlocked == 4) {
+            Image(painter = painterResource(id = R.drawable.silver), contentDescription = "")
+        }
+        if (unlocked == 5) {
+            Image(painter = painterResource(id = R.drawable.gold), contentDescription = "")
+        }
+        if (unlocked == 6) {
+            Image(painter = painterResource(id = R.drawable.dimond), contentDescription = "")
+        }
+    }
+}

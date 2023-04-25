@@ -12,8 +12,13 @@ data class User(
     var points: Int,
 
     @TypeConverters(DigiCatArrayTypeConverter::class)
-        var draw: Array<DigiCatData>
+        var draw: Array<DigiCatData>,
+    var achievements: Int = 0,
+    var sunAchievement: Boolean = false,
+    var snowAchievement: Boolean = false
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long? = null
 }
+
+

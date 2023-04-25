@@ -81,6 +81,17 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
                 }
             }
         }
+        saveFiles?.let {
+            if (saveFiles!!.isEmpty()){
+
+                Box(modifier = Modifier.size(height = 90.dp, width = 290.dp)) {
+
+                    Text("EMPTY", Modifier.align(Alignment.Center), fontSize = 50.sp, color = Color.White)
+
+                }
+            }
+        }
+
     }
 }
 

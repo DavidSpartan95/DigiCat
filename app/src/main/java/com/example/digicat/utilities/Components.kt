@@ -1,10 +1,7 @@
 package com.example.digicat.utilities
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -22,9 +19,12 @@ import com.example.digicat.ui.theme.orbitronBold
 
 @Composable
 fun DrawDigiCat(primeColor: Color, eyePart:Int, size: Int? = null) {
+
     var drawSize = 250
+
     if (size != null){ drawSize = size}
-    Box(Modifier.size(drawSize.dp), contentAlignment = Alignment.TopCenter) {
+
+    Box(Modifier.size(drawSize.dp).padding(5.dp), contentAlignment = Alignment.TopCenter) {
         Image(painter = painterResource(id = R.drawable.ears_outer), contentDescription = "",
             colorFilter = ColorFilter.tint(color = primeColor))
 
@@ -44,40 +44,54 @@ fun DrawDigiCat(primeColor: Color, eyePart:Int, size: Int? = null) {
 
 @Composable
 fun ChangeColorButton(){
-    Button(modifier = Modifier
-        .height(50.dp)
-        .widthIn(min = 32.dp)
-        ,onClick = {
-            digiCatViewModel.setColor()
-        }, colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(219,137,39))) {
-        Text(text = "Random Color",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+
+    Box(Modifier.padding(10.dp)) {
+
+        Button(modifier = Modifier
+            .height(50.dp)
+            .widthIn(min = 32.dp)
+            ,onClick = {
+                digiCatViewModel.setColor()
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))) {
+            Text(text = "Random Color",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+        }
     }
+
 }
 
 @Composable
 fun ChangeEyeButton(onClick:(() -> Unit)){
-    Button(modifier = Modifier
-        .height(50.dp)
-        .widthIn(min = 32.dp)
-        ,onClick = {
-            onClick.invoke()
-        }, colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(219,137,39))) {
-        Text(text = "Change Eyes",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+
+    Box(Modifier.padding(10.dp)) {
+
+        Button(modifier = Modifier
+            .height(50.dp)
+            .widthIn(min = 32.dp)
+            ,onClick = {
+                onClick.invoke()
+            }, colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))) {
+            Text(text = "Change Eyes",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+        }
     }
 }
 
 @Composable
 fun DoneButton(onClick:(() -> Unit)){
-    Button(modifier = Modifier
-        .height(50.dp)
-        .widthIn(min = 32.dp)
-        ,onClick = {
-            onClick.invoke()
-        },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(219,137,39))){
-        Text("DONE",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+
+    Box(Modifier.padding(5.dp)) {
+
+        Button(modifier = Modifier
+            .height(50.dp)
+            .widthIn(min = 32.dp)
+            ,onClick = {
+                onClick.invoke()
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(219,137,39))){
+            Text("DONE",color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
+        }
     }
+
 }
