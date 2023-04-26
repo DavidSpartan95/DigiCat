@@ -37,6 +37,7 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
         LaunchedEffect(key1 = true, key2 = delete){
             if (delete){delete = false}
             userRepository.performDatabaseOperation(Dispatchers.IO) {
+
                 try {
                     saveFiles = userRepository.getUsers()
                 }
@@ -82,8 +83,9 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
             }
         }
         saveFiles?.let {
+            println(saveFiles)
             if (saveFiles!!.isEmpty()){
-
+                println("Is not Empty $saveFiles")
                 Box(modifier = Modifier.size(height = 90.dp, width = 290.dp)) {
 
                     Text("EMPTY", Modifier.align(Alignment.Center), fontSize = 50.sp, color = Color.White)
@@ -91,7 +93,6 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
                 }
             }
         }
-
     }
 }
 

@@ -16,11 +16,15 @@ interface UserDao {
      fun incrementPoints(name: String)
     @Query("SELECT points FROM User WHERE name = :name")
     fun getPointsByName(name: String): Int
-    //Old Achv
+    // Special achievement
     @Query("SELECT sunAchievement FROM User WHERE name = :name")
     fun getSunUnlcok(name: String): Boolean
     @Query("UPDATE User SET sunAchievement = 1 WHERE name = :name")
     fun unlockSunAchv(name: String)
+    @Query("SELECT snowAchievement FROM User WHERE name = :name")
+    fun getSnowUnlcok(name: String): Boolean
+    @Query("UPDATE User SET snowAchievement = 1 WHERE name = :name")
+    fun unlockSnowAchv(name: String)
     // new
     @Query("UPDATE User SET achievements = achievements + 1 WHERE name = :name")
     fun incrementAchv(name: String)

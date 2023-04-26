@@ -25,6 +25,9 @@ coroutineScope : CoroutineScope ) {
     fun unlockSunAchvivments(name:String){//OLD
         appDatabase.userDao().unlockSunAchv(name)
     }
+    fun unlockSnowAchvivments(name:String){//OLD
+        appDatabase.userDao().unlockSnowAchv(name)
+    }
     fun unlockAchvimentsNew(name:String){//New
         appDatabase.userDao().incrementAchv(name)
     }

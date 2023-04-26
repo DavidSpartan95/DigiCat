@@ -38,7 +38,6 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
     val temp by temperatureViewModel.temp.collectAsState()
     val context = LocalContext.current
     var sunProg by remember { mutableStateOf(0) }
-    //TODO add snow in userDAO so user can unlock the snowAchievement
     var snowProg by remember { mutableStateOf(0) }
     var achvAmount by remember { mutableStateOf(0) }
     var achivmentUnlock by remember { mutableStateOf(false) }
@@ -89,7 +88,7 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                 if (temp != "null") {
                                     if (temp.toInt() > 10) {
                                         sunProg++
-                                    } else {
+                                    } else if(temp.toInt() <= 10) {
                                         snowProg++
                                     }
                                 }
@@ -105,7 +104,7 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                     achivmentUnlock = true
 
                                 }
-                                if (sunProg == 10 && !userDraw.value!!.sunAchievement) {
+                                if (sunProg == 30 && !userDraw.value!!.sunAchievement) {
                                     userRepository.unlockSunAchvivments(username)
 
                                     CoroutineScope(Dispatchers.Main).launch {
@@ -113,6 +112,18 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                         toastMessage("Achievement unlocked!", context)
 
                                     }
+                                    achivmentUnlock = true
+                                }
+
+                                if (snowProg == 30 && !userDraw.value!!.snowAchievement) {
+                                    userRepository.unlockSnowAchvivments(username)
+
+                                    CoroutineScope(Dispatchers.Main).launch {
+
+                                        toastMessage("Achievement unlocked!", context)
+
+                                    }
+                                    achivmentUnlock = true
                                 }
                             }
                         },
@@ -122,14 +133,13 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                     DrawDigiCat(userDraw.value!!.draw[0].color, userDraw.value!!.draw[0].drawInstruction)
 
                 }
-                //TODO make achievements
                 Text(text = "Achievements", color = Color.White,fontFamily = orbitronBold, fontSize = 24.sp)
 
                 LazyRow(){
 
                     items(achvAmount+2) {
                         if ((it == 0 && !userDraw.value!!.sunAchievement) ||(it == 1 && !userDraw.value!!.snowAchievement)){
-                            //dont draw the special achievements if we dont have them unlocked
+                            //
                         }else{
                             Box(
                                 Modifier
