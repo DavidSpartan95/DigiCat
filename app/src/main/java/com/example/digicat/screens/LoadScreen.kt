@@ -4,28 +4,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.digicat.api.temperatureViewModel
 import com.example.digicat.dataBase.User
 import com.example.digicat.dataBase.UserRepository
-import com.example.digicat.dataBase.userDigiCatData.DigiCatData
-import com.example.digicat.ui.theme.orbitronBold
+import com.example.digicat.utilities.DeleteButton
+import com.example.digicat.utilities.DisplayName
 import com.example.digicat.utilities.DrawDigiCat
+import com.example.digicat.utilities.LoadButton
 import kotlinx.coroutines.Dispatchers
 
 @Composable
@@ -96,60 +90,4 @@ fun LoadScreen(navController: NavController, userRepository: UserRepository) {
     }
 }
 
-@Composable
-fun DeleteButton(userRepository: UserRepository, userName: String, function:(() -> Unit)) {
-    Button(modifier = Modifier
-        .heightIn(min = 30.dp)
-        .widthIn(min = 80.dp),
-        onClick = {
-            userRepository.performDatabaseOperation(Dispatchers.IO) {
-                userRepository.deleteUser(userName)
-                function.invoke()
-            }
-
-        },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(255,0,0),
-            contentColor = Color.White)
-
-
-    ) {
-        Text(text = "Delete",fontFamily = orbitronBold, fontSize = 20.sp)
-    }
-
-}
-
-@Composable
-fun LoadButton(navController: NavController, userName: String){
-    Button(modifier = Modifier
-        .heightIn(min = 30.dp)
-        .widthIn(min = 80.dp),
-        onClick = {
-            navController.navigate(route = "game_screen/$userName"){
-                popUpTo(Screen.Load.route){
-                    inclusive = true
-                }
-            }
-        },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0,255,0),
-            contentColor = Color.White)
-    ) {
-        Text(text = "Load",fontFamily = orbitronBold, fontSize = 20.sp)
-    }
-}
-
-@Composable
-fun DisplayName(name:String){
-    Text(
-        text = name,
-        fontFamily = orbitronBold,
-        fontSize = 24.sp,
-        textAlign = TextAlign.Center,
-        color = Color.White,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 24.dp)
-    )
-}
 

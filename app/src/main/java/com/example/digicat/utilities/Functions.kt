@@ -27,23 +27,23 @@ fun toastMessage(msg: String, context: Context){
 fun checkAndNavigate(
     navController: NavController,
     userRepository: UserRepository,
-    text:String,
+    username:String,
     context: Context,
     eyePart: Int,
     color: Color
 ){
-    if (text.isNotEmpty()){
+    if (username.isNotEmpty() && username.length <= 8){
 
         userRepository.performDatabaseOperation(Dispatchers.IO) {
 
-            val foundUser = userRepository.getUsers().find { it.name == text }
+            val foundUser = userRepository.getUsers().find { it.name == username }
 
             if (foundUser == null){
-                userRepository.insertUser(User(text,0, arrayOf(DigiCatData(eyePart,color))))
+                userRepository.insertUser(User(username,0, arrayOf(DigiCatData(eyePart,color))))
 
                 CoroutineScope(Dispatchers.Main).launch {
 
-                    navController.navigate(route = "game_screen/$text"){
+                    navController.navigate(route = "game_screen/$username"){
 
                         popUpTo(Screen.Create.route){
 
@@ -62,6 +62,11 @@ fun checkAndNavigate(
         }
 
     }else{
-        toastMessage("please insert name",context)
+        if (username.length > 8) {
+            toastMessage("name too long",context)
+        }else{
+            toastMessage("please insert name",context)
+        }
+
     }
 }

@@ -1,7 +1,6 @@
 package com.example.digicat.screens
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,15 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.digicat.R
 import com.example.digicat.api.temperatureViewModel
 import com.example.digicat.dataBase.UserRepository
 import com.example.digicat.ui.theme.orbitronBold
 import com.example.digicat.utilities.DrawDigiCat
+import com.example.digicat.utilities.PaintAchviment
 import com.example.digicat.utilities.toastMessage
 import com.example.digicat.viewModel.DigiCatViewModel
 import com.example.digicat.viewModel.GameViewModel
@@ -33,7 +30,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun GameScreen(navController: NavController, userRepository: UserRepository, username: String) {
+fun GameScreen(userRepository: UserRepository, username: String) {
 
     val temp by temperatureViewModel.temp.collectAsState()
     val context = LocalContext.current
@@ -81,6 +78,9 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                         .heightIn(min = 32.dp)
                         .padding(45.dp)
                         .clickable {
+                            // This clickable is a bit too long,
+                            // to summarise: this code will add points, and progress to achievements
+                            // if a mile stone is meet a Toast pops up and the achievement is unlcoked
                             userRepository.performDatabaseOperation(Dispatchers.IO) {
 
                                 userRepository.addPoint(username)
@@ -92,9 +92,7 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                         snowProg++
                                     }
                                 }
-
                                 if (points == 10 || points == 100 || points == 1000 || points == 10000) {
-
                                     CoroutineScope(Dispatchers.Main).launch {
 
                                         toastMessage("Achievement unlocked!", context)
@@ -102,15 +100,12 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                     }
                                     userRepository.unlockAchvimentsNew(username)
                                     achivmentUnlock = true
-
                                 }
                                 if (sunProg == 30 && !userDraw.value!!.sunAchievement) {
                                     userRepository.unlockSunAchvivments(username)
-
                                     CoroutineScope(Dispatchers.Main).launch {
 
                                         toastMessage("Achievement unlocked!", context)
-
                                     }
                                     achivmentUnlock = true
                                 }
@@ -119,9 +114,7 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                     userRepository.unlockSnowAchvivments(username)
 
                                     CoroutineScope(Dispatchers.Main).launch {
-
                                         toastMessage("Achievement unlocked!", context)
-
                                     }
                                     achivmentUnlock = true
                                 }
@@ -152,35 +145,10 @@ fun GameScreen(navController: NavController, userRepository: UserRepository, use
                                 )
                             }
                         }
-
                     }
                 }
             }
         }
     }
-
 }
-@Composable
-fun PaintAchviment(unlocked:Int,sun:Boolean,snow:Boolean) {
 
-    Box(Modifier.size(75.dp), contentAlignment = Alignment.TopCenter) {
-        if (unlocked == 1 && sun) {
-            Image(painter = painterResource(id = R.drawable.sun), contentDescription = "")
-        }
-        if (unlocked == 2 && snow) {
-            Image(painter = painterResource(id = R.drawable.snow), contentDescription = "")
-        }
-        if (unlocked == 3) {
-            Image(painter = painterResource(id = R.drawable.bronze), contentDescription = "")
-        }
-        if (unlocked == 4) {
-            Image(painter = painterResource(id = R.drawable.silver), contentDescription = "")
-        }
-        if (unlocked == 5) {
-            Image(painter = painterResource(id = R.drawable.gold), contentDescription = "")
-        }
-        if (unlocked == 6) {
-            Image(painter = painterResource(id = R.drawable.dimond), contentDescription = "")
-        }
-    }
-}

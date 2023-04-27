@@ -2,22 +2,18 @@ package com.example.digicat.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.digicat.api.fetchWeather
 import com.example.digicat.api.temperatureViewModel
 import com.example.digicat.ui.theme.orbitronBold
-
+import com.example.digicat.utilities.MenuButton
 
 
 @Composable
