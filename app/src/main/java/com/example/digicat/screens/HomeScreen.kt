@@ -18,13 +18,14 @@ fun HomeScreen(navController: NavController) {
 
         Column(Modifier.fillMaxWidth(), Arrangement.Top, Alignment.CenterHorizontally) {
 
-            Title("DigiCat")
+            Title("Tiger")
         }
         Column(Modifier.fillMaxWidth(), Arrangement.Center, Alignment.CenterHorizontally) {
 
             MenuButton("NEW GAME",navController,Screen.Create.route)
             MenuButton("LOAD GAME",navController,Screen.Load.route)
             MenuButton("OPTION",navController,Screen.Option.route)
+
         }
     }
 }
