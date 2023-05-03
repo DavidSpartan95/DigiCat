@@ -38,11 +38,8 @@ fun CreateScreen(navController: NavController,userRepository: UserRepository) {
             Arrangement.Top, Alignment.CenterHorizontally) {
 
             Text(text = "Create", fontSize =75.sp, fontFamily = orbitronBold, color = Color.White)
-
             DrawDigiCat(digiColor,digiEye)
-
             ChangeColorButton()
-
             ChangeEyeButton { digiCatViewModel.changeEyeTest() }
 
             TextField(value = text, onValueChange = { digiCatViewModel.changeText(it)}, colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),

@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-
 val temperatureViewModel = TemperatureViewModel()
 fun fetchWeather() = CoroutineScope(Dispatchers.IO).launch {
     val client = OkHttpClient()
